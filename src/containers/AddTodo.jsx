@@ -21,9 +21,11 @@ class AddTodo extends React.Component {
             .dispatch(addTodo(input.value));
           input.value = '';
         }}>
-          <input ref={node => {
+          <input
+            ref={node => {
             input = node
-          }} placeholder="FAF"/>
+          }}
+            placeholder="Todo name"/>
           <button type="submit">
             Add Todo
           </button>
