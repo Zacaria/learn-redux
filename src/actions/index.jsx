@@ -2,16 +2,6 @@ import {v4} from 'node-uuid';
 import * as api from '../api';
 import {getIsFetching} from '../reducers';
 
-export const ADD_TODO = 'ADD_TODO';
-export const TOGGLE_TODO = 'TOGGLE_TODO';
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER';
-export const RECEIVE_TODOS = 'RECEIVE_TODOS';
-export const REQUEST_TODOS = 'REQUEST_TODOS';
-
-const requestTodos = (filter, response) => ({type: REQUEST_TODOS, filter});
-
-const receiveTodos = (filter, response) => ({type: RECEIVE_TODOS, filter, response});
-
 // This action is a thunk The given dispatch is also wrapped with thunk
 // middleware So it can dispatch both thunks and plain actions
 export const fetchTodos = (filter) => (dispatch, getState) => {
@@ -20,17 +10,23 @@ export const fetchTodos = (filter) => (dispatch, getState) => {
     return Promise.resolve();
   }
 
-  dispatch(requestTodos(filter));
+  dispatch({type: 'FETCH_TODOS_REQUEST', filter});
 
   return api
     .fetchTodos(filter)
     .then(response => {
-      dispatch(receiveTodos(filter, response))
+      dispatch({type: 'FETCH_TODOS_SUCCESS', filter, response});
+    }, error => {
+      dispatch({
+        type: 'FETCH_TODOS_FAILURE',
+        filter,
+        message: error.message || 'Default error'
+      });
     });
 };
 
 export const addTodo = (text) => {
-  return {type: ADD_TODO, id: v4(), text}
+  return {type: 'ADD_TODO', id: v4(), text}
 };
 
-export const toggleTodo = (id) => ({type: TOGGLE_TODO, id});
+export const toggleTodo = (id) => ({type: 'TOGGLE_TODO', id});
