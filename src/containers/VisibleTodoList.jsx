@@ -20,8 +20,9 @@ class VisibleTodoList extends Component {
   }
 
   fetchData() {
-    const {filter, requestTodos, fetchTodos} = this.props;
-    requestTodos(filter);
+    const {filter, fetchTodos} = this.props;
+    // The component doesn't know it calls async action Nor that it dispatches
+    // multiple actions
     fetchTodos(filter);
   }
 
