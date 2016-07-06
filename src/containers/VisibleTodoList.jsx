@@ -21,9 +21,8 @@ class VisibleTodoList extends Component {
 
   fetchData() {
     const {filter, fetchTodos} = this.props;
-    // The component doesn't know it calls async action Nor that it dispatches
-    // multiple actions
-    fetchTodos(filter);
+    // We can now know when the async flow ends !
+    fetchTodos(filter).then(() => console.log('done'));
   }
 
   render() {

@@ -1,5 +1,6 @@
 import {v4} from 'node-uuid';
 import * as api from '../api';
+import {getIsFetching} from '../reducers';
 
 export const ADD_TODO = 'ADD_TODO';
 export const TOGGLE_TODO = 'TOGGLE_TODO';
@@ -13,7 +14,12 @@ const receiveTodos = (filter, response) => ({type: RECEIVE_TODOS, filter, respon
 
 // This action is a thunk The given dispatch is also wrapped with thunk
 // middleware So it can dispatch both thunks and plain actions
-export const fetchTodos = (filter) => (dispatch) => {
+export const fetchTodos = (filter) => (dispatch, getState) => {
+  if (getIsFetching(getState(), filter)) {
+    // return a promise to match the other return
+    return Promise.resolve();
+  }
+
   dispatch(requestTodos(filter));
 
   return api
